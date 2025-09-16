@@ -17,12 +17,7 @@ public class UDPServer {
             System.out.println("Modtaget: " + sentence + " fra " + packet.getAddress());
 
             // Echo back to the client on the port it came from
-            DatagramPacket sendPacket = new DatagramPacket(
-                    sentence.getBytes(),
-                    sentence.length(),
-                    packet.getAddress(),
-                    packet.getPort()  // 👈 IMPORTANT: use client's port
-            );
+            DatagramPacket sendPacket = new DatagramPacket(packet.getData(), packet.getLength(), InetAddress.getByName("255.255.255.255"), 7689);
 
             socket.send(sendPacket);
         }
