@@ -1,35 +1,38 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.net.*;
 
 public class UDPClient {
-    public static void main(String[] args) throws Exception {
-        DatagramSocket socket = new DatagramSocket();
-        InetAddress serverAddr = InetAddress.getByName("localhost");
-        int port = 7689;
+    DatagramSocket socket;
+    InetAddress serverAddress;
+    int serverPort = 7689;
 
-        BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in));
+    public UDPClient() throws Exception {
+        socket = new DatagramSocket();
+        serverAddress = InetAddress.getByName("localhost");
 
-        while (true) {
-            System.out.print("Indtast besked eller skriv forlad: ");
-            String msg = userInput.readLine();
-            if (!msg.equalsIgnoreCase("forlad")) {
-
-                // send besked
-                byte[] sendData = msg.getBytes();
-                DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, serverAddr, port);
-                socket.send(sendPacket);
-
-                // modtag echo
-                byte[] buffer = new byte[1024];
-                DatagramPacket receivePacket = new DatagramPacket(buffer, buffer.length);
-                socket.receive(receivePacket);
-
-                String echo = new String(receivePacket.getData(), 0, receivePacket.getLength());
-                System.out.println("FROM SERVER: " + echo);
+        // Start modtage-tråd
+        Thread receiver = new Thread(() -> {
+            byte[] buffer = new byte[1024];
+            while(true){
+                try{
+                    DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+                    socket.receive(packet);
+                    String msg = new String(packet.getData(), 0, packet.getLength());
+                    System.out.println("Ekko fra server: " + msg);
+                } catch(Exception e){ e.printStackTrace(); }
             }
+        });
+        receiver.start();
+    }
 
-            socket.close();
-        }
+    public void sendMoves(String message) throws Exception {
+        byte[] data = message.getBytes();
+        DatagramPacket packet = new DatagramPacket(data, data.length, serverAddress, serverPort);
+        socket.send(packet);
+    }
+
+    public static void main(String[] args) throws Exception {
+        UDPClient client = new UDPClient();
+        // Test om der kan sendes moves
+        // client.sendMoves("MOVE|UP|9|4");
     }
 }

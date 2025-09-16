@@ -51,6 +51,8 @@ public class GUI extends Application {
 			"wwwwwwwwwwwwwwwwwwww"
 	};
 
+	public UDPClient client;
+
 	
 	// -------------------------------------------
 	// | Maze: (0,0)              | Score: (1,0) |
@@ -112,6 +114,8 @@ public class GUI extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.show();
 
+
+
 			scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
 				switch (event.getCode()) {
 				case UP:    playerMoved(0,-1,"up");    break;
@@ -140,7 +144,8 @@ public class GUI extends Application {
 
 	public void playerMoved(int delta_x, int delta_y, String direction) {
 		me.direction = direction;
-		int x = me.getXpos(),y = me.getYpos();
+
+		int x = me.getXpos(), y = me.getYpos();
 
 		if (board[y+delta_y].charAt(x+delta_x)=='w') {
 			me.addPoints(-1);
@@ -175,6 +180,14 @@ public class GUI extends Application {
 			}
 		}
 		scoreList.setText(getScoreList());
+ //test
+		try {
+			String message = "MOVE|" + me.name + "|" + direction + "|" + me.getXpos() + "|" + me.getYpos();
+			client.sendMoves(message);
+			System.out.println(message);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public String getScoreList() {
