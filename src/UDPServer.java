@@ -5,20 +5,16 @@ public class UDPServer {
     public static void main(String[] args) throws IOException {
         DatagramSocket socket = new DatagramSocket(7689);
         socket.setBroadcast(true);
-        byte[] buffer = new byte[1024];
-
-        System.out.println("Server lytter på port 7689");
+        byte[] recieveData = new byte[1024];
 
         while (true) {
-            DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-            socket.receive(packet);
+            DatagramPacket recievePacket = new DatagramPacket(recieveData, recieveData.length);
+            socket.receive(recievePacket);
 
-            String sentence = new String(packet.getData(), 0, packet.getLength());
-            System.out.println("Modtaget: " + sentence + " fra " + packet.getAddress());
+            String sentence = new String(recievePacket.getData(), 0, recievePacket.getLength());
+            System.out.println("Modtaget: " + sentence + " fra " + recievePacket.getAddress());
 
-            // Echo back to the client on the port it came from
-            DatagramPacket sendPacket = new DatagramPacket(packet.getData(), packet.getLength(), InetAddress.getByName("255.255.255.255"), 7689);
-
+            DatagramPacket sendPacket = new DatagramPacket(recievePacket.getData(), recievePacket.getLength(), InetAddress.getByName("255.255.255.255"), 9000);
             socket.send(sendPacket);
         }
     }

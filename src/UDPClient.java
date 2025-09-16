@@ -9,13 +9,18 @@ public class UDPClient {
 
     public UDPClient() throws Exception {
         serverAddress = InetAddress.getByName("localhost");
-        socket = new DatagramSocket();
+        socket = new DatagramSocket(9000);
         socket.setBroadcast(true);
+        (new RecieveThread(socket)).start();
     }
 
-    public void sendMessage(String message) throws IOException {
+    public void sendMessage(String message) {
         byte[] sendData = message.getBytes();
         DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, serverAddress,7689);
-        socket.send(sendPacket);
+        try {
+            socket.send(sendPacket);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

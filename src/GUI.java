@@ -17,7 +17,6 @@ public class GUI extends Application {
 	public static final int size = 20; 
 	public static final int scene_height = size * 20 + 100;
 	public static final int scene_width = size * 20 + 200;
-	public static String move = "";
 
 	public static Image image_floor;
 	public static Image image_wall;
@@ -52,7 +51,7 @@ public class GUI extends Application {
 			"wwwwwwwwwwwwwwwwwwww"
 	};
 
-	
+
 	// -------------------------------------------
 	// | Maze: (0,0)              | Score: (1,0) |
 	// |-----------------------------------------|
@@ -63,6 +62,8 @@ public class GUI extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+			UDPClient client = new UDPClient();
+
 			GridPane grid = new GridPane();
 			grid.setHgap(10);
 			grid.setVgap(10);
@@ -113,24 +114,28 @@ public class GUI extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.show();
 
-//			scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-//				switch (event.getCode()) {
-//				case UP:    playerMoved(0,-1,"up");    break;
-//				case DOWN:  playerMoved(0,+1,"down");  break;
-//				case LEFT:  playerMoved(-1,0,"left");  break;
-//				case RIGHT: playerMoved(+1,0,"right"); break;
-//				default: break;
-//				}
-//			});
-
-			switch(move) {
-				case "UP":    playerMoved(0,-1,"up");    break;
-				case "DOWN":  playerMoved(0,+1,"down");  break;
-				case "LEFT":  playerMoved(-1,0,"left");  break;
-				case "RIGHT": playerMoved(+1,0,"right"); break;
+			scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+				switch (event.getCode()) {
+				case UP:
+					client.sendMessage(me.name + " up");
+					playerMoved(0,-1,"up");
+					break;
+				case DOWN:
+					client.sendMessage(me.name + " down");
+					playerMoved(0,+1,"down");
+					break;
+				case LEFT:
+					client.sendMessage(me.name + " left");
+					playerMoved(-1,0,"left");
+					break;
+				case RIGHT:
+					client.sendMessage(me.name + " right");
+					playerMoved(+1,0,"right");
+					break;
 				default: break;
 				}
-			
+			});
+
             // Setting up standard players
 			
 			me = new Player("Orville",9,4,"up");
@@ -202,10 +207,5 @@ public class GUI extends Application {
 		}
 		return null;
 	}
-
-	public static void moveAllowed(String moveCommand){
-		move = moveCommand;
-	}
-
 }
 
