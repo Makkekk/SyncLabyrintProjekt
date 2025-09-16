@@ -2,7 +2,6 @@
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.stage.Stage;
@@ -150,7 +149,7 @@ public class GUI extends Application {
 			Player p = getPlayerAt(x+delta_x,y+delta_y);
 			if (p!=null) {
               me.addPoints(10);
-              p.addPoints(-10);
+              p.addPoints(-10);  //tråd
 			} else {
 				me.addPoints(1);
 			
