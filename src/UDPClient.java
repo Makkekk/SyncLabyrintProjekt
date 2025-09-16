@@ -4,22 +4,34 @@ import java.net.*;
 
 public class UDPClient {
     public static void main(String[] args) throws Exception {
-        BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
-
         DatagramSocket socket = new DatagramSocket();
-        InetAddress ipAdress = InetAddress.getByName("localhost");
-        byte[] recieveData = new byte[1024];
-        byte[] sendData;
+        InetAddress serverAddr = InetAddress.getByName("localhost");
+        int port = 7689;
 
-        String sentence = inFromUser.readLine();
-        sendData = sentence.getBytes();
+        BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in));
 
-        DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, ipAdress, 7689);
-        socket.send(sendPacket);
+        while (true) {
+            System.out.print("Indtast besked eller skriv forlad: ");
+            String msg = userInput.readLine();
 
-        DatagramPacket recievePacket = new DatagramPacket(recieveData, recieveData.length);
-        socket.receive(recievePacket);
+            if (msg.equalsIgnoreCase("forlad")) {
+                break; // exit loop
+            }
 
-        socket.close();
+            // send besked
+            byte[] sendData = msg.getBytes();
+            DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, serverAddr, port);
+            socket.send(sendPacket);
+
+            // modtag echo
+            byte[] buffer = new byte[1024];
+            DatagramPacket receivePacket = new DatagramPacket(buffer, buffer.length);
+            socket.receive(receivePacket);
+
+            String echo = new String(receivePacket.getData(), 0, receivePacket.getLength());
+            System.out.println("FROM SERVER: " + echo);
+        }
+
+        socket.close(); // 👈 only close when done
     }
 }

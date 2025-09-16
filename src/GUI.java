@@ -17,6 +17,7 @@ public class GUI extends Application {
 	public static final int size = 20; 
 	public static final int scene_height = size * 20 + 100;
 	public static final int scene_width = size * 20 + 200;
+	public static String move = "";
 
 	public static Image image_floor;
 	public static Image image_wall;
@@ -112,15 +113,23 @@ public class GUI extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.show();
 
-			scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-				switch (event.getCode()) {
-				case UP:    playerMoved(0,-1,"up");    break;
-				case DOWN:  playerMoved(0,+1,"down");  break;
-				case LEFT:  playerMoved(-1,0,"left");  break;
-				case RIGHT: playerMoved(+1,0,"right"); break;
+//			scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+//				switch (event.getCode()) {
+//				case UP:    playerMoved(0,-1,"up");    break;
+//				case DOWN:  playerMoved(0,+1,"down");  break;
+//				case LEFT:  playerMoved(-1,0,"left");  break;
+//				case RIGHT: playerMoved(+1,0,"right"); break;
+//				default: break;
+//				}
+//			});
+
+			switch(move) {
+				case "UP":    playerMoved(0,-1,"up");    break;
+				case "DOWN":  playerMoved(0,+1,"down");  break;
+				case "LEFT":  playerMoved(-1,0,"left");  break;
+				case "RIGHT": playerMoved(+1,0,"right"); break;
 				default: break;
 				}
-			});
 			
             // Setting up standard players
 			
@@ -194,6 +203,9 @@ public class GUI extends Application {
 		return null;
 	}
 
+	public static void moveAllowed(String moveCommand){
+		move = moveCommand;
+	}
 
 }
 

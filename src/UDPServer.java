@@ -3,21 +3,28 @@ import java.net.*;
 
 public class UDPServer {
     public static void main(String[] args) throws IOException {
-        DatagramSocket socket = new DatagramSocket();
+        DatagramSocket socket = new DatagramSocket(7689);
         socket.setBroadcast(true);
+        byte[] buffer = new byte[1024];
 
-        byte[] reciveData = new byte[1024];
-        byte[] sendData;
+        System.out.println("Server lytter på port 7689");
 
-        while (true){
-            DatagramPacket receivePacket = new DatagramPacket(reciveData, reciveData.length);
-            socket.receive(receivePacket);
-            String sentence = new String(receivePacket.getData());
-            InetAddress IpAdress = InetAddress.getByName("255.255.255.255");
-            int port = receivePacket.getPort();
-            sendData = sentence.getBytes();
-            DatagramPacket sendpacket = new DatagramPacket(sendData, sendData.length, IpAdress, port);
-            socket.send(sendpacket);
+        while (true) {
+            DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+            socket.receive(packet);
+
+            String sentence = new String(packet.getData(), 0, packet.getLength());
+            System.out.println("Modtaget: " + sentence + " fra " + packet.getAddress());
+
+            // Echo back to the client on the port it came from
+            DatagramPacket sendPacket = new DatagramPacket(
+                    sentence.getBytes(),
+                    sentence.length(),
+                    packet.getAddress(),
+                    packet.getPort()  // 👈 IMPORTANT: use client's port
+            );
+
+            socket.send(sendPacket);
         }
     }
 }
