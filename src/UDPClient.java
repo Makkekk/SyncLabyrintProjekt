@@ -1,13 +1,19 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.*;
 
 public class UDPClient {
-    DatagramSocket socket;
-    InetAddress serverAddress;
-    int serverPort = 7689;
+    public static void main(String[] args) throws Exception {
+        DatagramSocket socket = new DatagramSocket();
+        InetAddress serverAddr = InetAddress.getByName("localhost");
+        int port = 7689;
 
-    public UDPClient() throws Exception {
-        socket = new DatagramSocket();
-        serverAddress = InetAddress.getByName("localhost");
+        BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in));
+
+        while (true) {
+            System.out.print("Indtast besked eller skriv forlad: ");
+            String msg = userInput.readLine();
+            if (!msg.equalsIgnoreCase("forlad")) {
 
         // Start modtage-tråd
         Thread receiver = new Thread(() -> {
