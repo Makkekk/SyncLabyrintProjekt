@@ -26,8 +26,9 @@ public class GUI extends Application {
 	public static List<Player> players = new ArrayList<Player>();
 
 	private Label[][] fields;
-	private TextArea scoreList;
-	
+	private static TextArea scoreList;
+	private UDPClient client;
+
 	private  String[] board = {    // 20x20
 			"wwwwwwwwwwwwwwwwwwww",
 			"w        ww        w",
@@ -51,7 +52,6 @@ public class GUI extends Application {
 			"wwwwwwwwwwwwwwwwwwww"
 	};
 
-	public UDPClient client;
 
 	
 	// -------------------------------------------
@@ -61,9 +61,11 @@ public class GUI extends Application {
 	// |                          | (1,1)        |
 	// -------------------------------------------
 
+
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+            client = new UDPClient();
 			GridPane grid = new GridPane();
 			grid.setHgap(10);
 			grid.setVgap(10);
@@ -183,8 +185,7 @@ public class GUI extends Application {
  //test
 		try {
 			String message = "MOVE|" + me.name + "|" + direction + "|" + me.getXpos() + "|" + me.getYpos();
-			client.sendMoves(message);
-			System.out.println(message);
+			client.send(message);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -207,6 +208,9 @@ public class GUI extends Application {
 		return null;
 	}
 
+    public static void addMessage(String besked) {
+        scoreList.appendText(besked + "\n");
+    }
 
 }
 
