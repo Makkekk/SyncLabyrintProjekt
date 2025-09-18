@@ -1,0 +1,29 @@
+<component name="libraryTable">
+  <library name="openjfx.javafx.controls" type="repository">
+    <properties maven-id="org.openjfx:javafx-controls:22" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/javafx-controls-22.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javafx-controls-22-linux.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javafx-graphics-22.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javafx-graphics-22-linux.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javafx-base-22.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javafx-base-22-linux.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/lib/javafx-controls-22-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javafx-controls-22-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javafx-graphics-22-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javafx-graphics-22-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javafx-base-22-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javafx-base-22-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/javafx-controls-22-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javafx-controls-22-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javafx-graphics-22-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javafx-graphics-22-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javafx-base-22-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javafx-base-22-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
