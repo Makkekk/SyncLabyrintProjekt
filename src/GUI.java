@@ -130,21 +130,24 @@ public class GUI extends Application {
 			
             // Setting up standard players
 			
-			me = new Player("Orville",9,4,"up");
-			players.add(me);
-			fields[9][4].setGraphic(new ImageView(hero_up));
+        //me = new Player("Orville",9,4,"up");
 
-			Player harry = new Player("Harry",14,15,"up");
-			players.add(harry);
-			fields[14][15].setGraphic(new ImageView(hero_up));
+        addPlayer("shit", "up");
 
-			scoreList.setText(getScoreList());
+			//players.add(me);
+//			fields[9][4].setGraphic(new ImageView(hero_up));
+//
+//			Player harry = new Player("Harry","up");
+//			players.add(harry);
+//			fields[14][15].setGraphic(new ImageView(hero_up));
+
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void playerMoved(int delta_x, int delta_y, String direction) {
+
 		me.direction = direction;
 
 		int x = me.getXpos(), y = me.getYpos();
@@ -211,6 +214,21 @@ public class GUI extends Application {
     public static void addMessage(String besked) {
         scoreList.appendText(besked + "\n");
     }
+
+    public void addPlayer (String name, String direction){
+        int startX =(int) (Math.random()* 20);
+        int startY =(int) (Math.random()* 20);
+        Player player = new Player(name, startX, startY, direction);
+        players.add(player);
+        fields[startX][startY].setGraphic(new ImageView(hero_up));
+        me = player;
+        scoreList.setText(getScoreList());
+
+
+    }
+
+
+
 
 }
 
