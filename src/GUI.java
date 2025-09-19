@@ -62,7 +62,7 @@ public class GUI extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			UDPClient client = new UDPClient();
+			TCPClient client = new TCPClient();
 
 			GridPane grid = new GridPane();
 			grid.setHgap(10);
