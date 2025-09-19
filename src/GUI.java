@@ -2,6 +2,8 @@
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.stage.Stage;
@@ -25,10 +27,10 @@ public class GUI extends Application {
 	public static Player me;
 	public static List<Player> players = new ArrayList<Player>();
 
-	private Label[][] fields;
-	private TextArea scoreList;
+	private static Label[][] fields;
+	private static TextArea scoreList;
 	
-	private  String[] board = {    // 20x20
+	private static String[] board = {    // 20x20
 			"wwwwwwwwwwwwwwwwwwww",
 			"w        ww        w",
 			"w w  w  www w  w  ww",
@@ -118,19 +120,19 @@ public class GUI extends Application {
 				switch (event.getCode()) {
 				case UP:
 					client.sendMessage(me.name + " up");
-					playerMoved(0,-1,"up");
+//					playerMoved(0,-1,"up");
 					break;
 				case DOWN:
 					client.sendMessage(me.name + " down");
-					playerMoved(0,+1,"down");
+//					playerMoved(0,+1,"down");
 					break;
 				case LEFT:
 					client.sendMessage(me.name + " left");
-					playerMoved(-1,0,"left");
+//					playerMoved(-1,0,"left");
 					break;
 				case RIGHT:
 					client.sendMessage(me.name + " right");
-					playerMoved(+1,0,"right");
+//					playerMoved(+1,0,"right");
 					break;
 				default: break;
 				}
@@ -152,20 +154,26 @@ public class GUI extends Application {
 		}
 	}
 
-	public void playerMoved(int delta_x, int delta_y, String direction) {
-		me.direction = direction;
-		int x = me.getXpos(),y = me.getYpos();
+	public static void playerMoved(String playerName, int delta_x, int delta_y, String direction) {
+		Player newplayer = null;
+		for (Player player : players) {
+			if (Objects.equals(player.name, playerName)){
+				newplayer = player;
+			}
+		}
+		newplayer.direction = direction;
+		int x = newplayer.getXpos(),y = newplayer.getYpos();
 
 		if (board[y+delta_y].charAt(x+delta_x)=='w') {
-			me.addPoints(-1);
+			newplayer.addPoints(-1);
 		} 
 		else {
 			Player p = getPlayerAt(x+delta_x,y+delta_y);
 			if (p!=null) {
-              me.addPoints(10);
+              newplayer.addPoints(10);
               p.addPoints(-10);  //tråd
 			} else {
-				me.addPoints(1);
+				newplayer.addPoints(1);
 			
 				fields[x][y].setGraphic(new ImageView(image_floor));
 				x+=delta_x;
@@ -184,14 +192,14 @@ public class GUI extends Application {
 					fields[x][y].setGraphic(new ImageView(hero_down));
 				};
 
-				me.setXpos(x);
-				me.setYpos(y);
+				newplayer.setXpos(x);
+				newplayer.setYpos(y);
 			}
 		}
 		scoreList.setText(getScoreList());
 	}
 
-	public String getScoreList() {
+	public static String getScoreList() {
 		StringBuffer b = new StringBuffer(100);
 		for (Player p : players) {
 			b.append(p+"\r\n");
@@ -199,7 +207,7 @@ public class GUI extends Application {
 		return b.toString();
 	}
 
-	public Player getPlayerAt(int x, int y) {
+	public static Player getPlayerAt(int x, int y) {
 		for (Player p : players) {
 			if (p.getXpos()==x && p.getYpos()==y) {
 				return p;
