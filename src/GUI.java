@@ -51,9 +51,7 @@ public class GUI extends Application {
 			"wwwwwwwwwwwwwwwwwwww"
 	};
 
-	public UDPClient client;
 
-	
 	// -------------------------------------------
 	// | Maze: (0,0)              | Score: (1,0) |
 	// |-----------------------------------------|
@@ -64,6 +62,8 @@ public class GUI extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+			TCPClient client = new TCPClient();
+
 			GridPane grid = new GridPane();
 			grid.setHgap(10);
 			grid.setVgap(10);
@@ -114,18 +114,28 @@ public class GUI extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.show();
 
-
-
 			scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
 				switch (event.getCode()) {
-				case UP:    playerMoved(0,-1,"up");    break;
-				case DOWN:  playerMoved(0,+1,"down");  break;
-				case LEFT:  playerMoved(-1,0,"left");  break;
-				case RIGHT: playerMoved(+1,0,"right"); break;
+				case UP:
+					client.sendMessage(me.name + " up");
+					playerMoved(0,-1,"up");
+					break;
+				case DOWN:
+					client.sendMessage(me.name + " down");
+					playerMoved(0,+1,"down");
+					break;
+				case LEFT:
+					client.sendMessage(me.name + " left");
+					playerMoved(-1,0,"left");
+					break;
+				case RIGHT:
+					client.sendMessage(me.name + " right");
+					playerMoved(+1,0,"right");
+					break;
 				default: break;
 				}
 			});
-			
+
             // Setting up standard players
 			
 			me = new Player("Orville",9,4,"up");
@@ -144,8 +154,7 @@ public class GUI extends Application {
 
 	public void playerMoved(int delta_x, int delta_y, String direction) {
 		me.direction = direction;
-
-		int x = me.getXpos(), y = me.getYpos();
+		int x = me.getXpos(),y = me.getYpos();
 
 		if (board[y+delta_y].charAt(x+delta_x)=='w') {
 			me.addPoints(-1);
@@ -180,14 +189,6 @@ public class GUI extends Application {
 			}
 		}
 		scoreList.setText(getScoreList());
- //test
-		try {
-			String message = "MOVE|" + me.name + "|" + direction + "|" + me.getXpos() + "|" + me.getYpos();
-			client.sendMoves(message);
-			System.out.println(message);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	public String getScoreList() {
@@ -206,7 +207,5 @@ public class GUI extends Application {
 		}
 		return null;
 	}
-
-
 }
 
