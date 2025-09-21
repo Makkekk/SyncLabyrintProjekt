@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.net.*;
 
 public class TCPClient {
-    Socket socket = new Socket("localhost", 9000);
+    Socket socket = new Socket("192.168.0.195", 9000);
 //    InetAddress serverAddress;
     RecieveThread recieveThread;
     DataOutputStream out = new DataOutputStream(socket.getOutputStream());
