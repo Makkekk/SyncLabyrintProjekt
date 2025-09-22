@@ -58,15 +58,40 @@ public class TCPServer {
 
     private static void haandterClient(Socket socket) {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+
+            // First message from client is the player name
+            String playerName = in.readLine();
+            if (playerName == null) return;
+
+            // Assign a starting position (just an example, can adjust)
+            int startX = 1, startY = 1;
+            synchronized(players) {
+                outer:
+                for (int y = 1; y < 20; y++) {
+                    for (int x = 1; x < 20; x++) {
+                        if (board[y].charAt(x) == ' ' && getPlayerAt(x, y) == null) {
+                            startX = x;
+                            startY = y;
+                            break outer;
+                        }
+                    }
+                }
+                players.add(new Player(playerName, startX, startY, "up"));
+            }
+
+
+            broadcast("UPDATE " + playerName + " " + startX + " " + startY + " up 0");
+
+
             String message;
             while ((message = in.readLine()) != null) {
-                // Hver besked er f.eks. "Peter up"
                 handleMove(message);
             }
+
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("Client disconnected: " + socket.getInetAddress());
         }
-
     }
 
     private static synchronized void handleMove(String message) {
