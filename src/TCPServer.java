@@ -17,27 +17,28 @@ public class TCPServer {
     }
 
 
-private static void haandterClient(Socket socket) {
-    try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
-        String message;
-        while ((message = in.readLine()) != null) {
-            System.out.println("Server modtog: " + message);
-            broadcast(message);
-        }
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-
-}
-
-private static void broadcast(String message) {
-    for (Socket client : clients) {
-        try {
-            DataOutputStream out = new DataOutputStream(client.getOutputStream());
-            out.writeBytes(message + "\n");
+    private static void haandterClient(Socket socket) {
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+            String message;
+            while ((message = in.readLine()) != null) {
+                //System.out.println("Server modtog: " + message);
+                broadcast(message);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
-}
+
+    private static void broadcast(String message) {
+        for (Socket client : clients) {
+            try {
+                DataOutputStream out = new DataOutputStream(client.getOutputStream());
+                out.writeBytes(message + "\n");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }

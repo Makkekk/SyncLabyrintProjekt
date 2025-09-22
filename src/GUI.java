@@ -139,9 +139,9 @@ public class GUI extends Application {
 			});
 
             // Setting up standard players
-			String myName = "Karsten";
+			String myName = "Peter";
 
-			me = new Player("myName",9,4,"up");
+			me = new Player(myName,9,4,"up");
 			players.add(me);
 			fields[9][4].setGraphic(new ImageView(hero_up));
 
@@ -198,12 +198,12 @@ public class GUI extends Application {
 	}
 
 	public static String getScoreList() {
-		StringBuffer b = new StringBuffer(100);
-		for (Player p : players) {
-			b.append(p+"\r\n");
-		}
-		return b.toString();
-	}
+        String result = "";
+        for (Player p : players) {
+            result += p + "\r\n";
+        }
+        return result;
+    }
 
 	public static Player getPlayerAt(int x, int y) {
 		for (Player p : players) {
