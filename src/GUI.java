@@ -66,7 +66,10 @@ public class GUI extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-            client = new TCPClient("192.168.0.210",9000,this);
+            String myName = "Peter";
+            me = new Player(myName,0,0,"up");
+            players.add(me);
+            client = new TCPClient("192.168.0.210",9000,this,myName);
 
 			GridPane grid = new GridPane();
 			grid.setHgap(10);
@@ -139,12 +142,6 @@ public class GUI extends Application {
 				default: break;
 				}
 			});
-
-            // Setting up standard players
-			String myName = "Peter";
-			me = new Player(myName,9,4,"up");
-			players.add(me);
-			fields[9][4].setGraphic(new ImageView(hero_up));
 
 		} catch(Exception e) {
 			e.printStackTrace();
