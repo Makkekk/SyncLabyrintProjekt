@@ -1,10 +1,9 @@
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -25,46 +24,49 @@ public class GUI extends Application {
 	public static Image hero_right,hero_left,hero_up,hero_down;
 
 	public static Player me;
-	public static List<Player> players = new ArrayList<Player>();
+    public static List<Player> players = new ArrayList<>();
 
 	private static Label[][] fields;
 	private static TextArea scoreList;
 
-	private static String[] board = {    // 20x20
-			"wwwwwwwwwwwwwwwwwwww",
-			"w        ww        w",
-			"w w  w  www w  w  ww",
-			"w w  w   ww w  w  ww",
-			"w  w               w",
-			"w w w w w w w  w  ww",
-			"w w     www w  w  ww",
-			"w w     w w w  w  ww",
-			"w   w w  w  w  w   w",
-			"w     w  w  w  w   w",
-			"w ww ww        w  ww",
-			"w  w w    w    w  ww",
-			"w        ww w  w  ww",
-			"w         w w  w  ww",
-			"w        w     w  ww",
-			"w  w              ww",
-			"w  w www  w w  ww ww",
-			"w w      ww w     ww",
-			"w   w   ww  w      w",
-			"wwwwwwwwwwwwwwwwwwww"
-	};
+    private TCPClient client;
+
+    private static String[] board = {    // 20x20
+            "wwwwwwwwwwwwwwwwwwww",
+            "w        ww        w",
+            "w w  w  www w  w  ww",
+            "w w  w   ww w  w  ww",
+            "w  w               w",
+            "w w w w w w w  w  ww",
+            "w w     www w  w  ww",
+            "w w     w w w  w  ww",
+            "w   w w  w  w  w   w",
+            "w     w  w  w  w   w",
+            "w ww ww        w  ww",
+            "w  w w    w    w  ww",
+            "w        ww w  w  ww",
+            "w         w w  w  ww",
+            "w        w     w  ww",
+            "w  w              ww",
+            "w  w www  w w  ww ww",
+            "w w      ww w     ww",
+            "w   w   ww  w      w",
+            "wwwwwwwwwwwwwwwwwwww"
+    };
 
 
-	// -------------------------------------------
-	// | Maze: (0,0)              | Score: (1,0) |
-	// |-----------------------------------------|
-	// | boardGrid (0,1)          | scorelist    |
-	// |                          | (1,1)        |
-	// -------------------------------------------
+    // -------------------------------------------
+    // | Maze: (0,0)              | Score: (1,0) |
+    // |-----------------------------------------|
+    // | boardGrid (0,1)          | scorelist    |
+    // |                          | (1,1)        |
+    // -------------------------------------------
+
 
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			TCPClient client = new TCPClient();
+            client = new TCPClient("192.168.0.210",9000,this);
 
 			GridPane grid = new GridPane();
 			grid.setHgap(10);
@@ -140,64 +142,52 @@ public class GUI extends Application {
 
             // Setting up standard players
 			String myName = "Peter";
-
 			me = new Player(myName,9,4,"up");
 			players.add(me);
 			fields[9][4].setGraphic(new ImageView(hero_up));
 
-
-			scoreList.setText(getScoreList());
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public static void playerMoved(String playerName, int delta_x, int delta_y, String direction) {
-		Player newplayer = null;
-		for (Player player : players) {
-			if (Objects.equals(player.name, playerName)){
-				newplayer = player;
-			}
-		}
-		newplayer.direction = direction;
-		int x = newplayer.getXpos(),y = newplayer.getYpos();
+    // Modtag update fra server og opdater GUI
+    public static void updatePlayer(String name, int x, int y, String direction, int points) {
+            Player player = getPlayerByName(name);
+            if (player == null) {
+                player = new Player(name, x, y, direction);
+                players.add(player);
+            }
 
-		if (board[y+delta_y].charAt(x+delta_x)=='w') {
-			newplayer.addPoints(-1);
-		}
-		else {
-			Player p = getPlayerAt(x+delta_x,y+delta_y);
-			if (p!=null) {
-              newplayer.addPoints(10);
-              p.addPoints(-10);  //tråd
-			} else {
-				newplayer.addPoints(1);
+            // Fjern gammel position
+            fields[player.getXpos()][player.getYpos()].setGraphic(new ImageView(image_floor));
 
-				fields[x][y].setGraphic(new ImageView(image_floor));
-				x+=delta_x;
-				y+=delta_y;
+            // Opdater data
+            player.setXpos(x);
+            player.setYpos(y);
+            player.direction = direction;
+            player.setPoint(points);
 
-				if (direction.equals("right")) {
-					fields[x][y].setGraphic(new ImageView(hero_right));
-				};
-				if (direction.equals("left")) {
-					fields[x][y].setGraphic(new ImageView(hero_left));
-				};
-				if (direction.equals("up")) {
-					fields[x][y].setGraphic(new ImageView(hero_up));
-				};
-				if (direction.equals("down")) {
-					fields[x][y].setGraphic(new ImageView(hero_down));
-				};
+            if (direction.equals("up")) {
+                fields[x][y].setGraphic(new ImageView(hero_up));
+            } else if (direction.equals("down")) {
+                fields[x][y].setGraphic(new ImageView(hero_down));
+            } else if (direction.equals("left")) {
+                fields[x][y].setGraphic(new ImageView(hero_left));
+            } else if (direction.equals("right")) {
+                fields[x][y].setGraphic(new ImageView(hero_right));
+            }
+            scoreList.setText(getScoreList());
+        }
 
-				newplayer.setXpos(x);
-				newplayer.setYpos(y);
-			}
-		}
-		scoreList.setText(getScoreList());
-	}
+    public static Player getPlayerByName(String name) {
+        for (Player p : players) {
+            if (Objects.equals(p.name, name)) return p;
+        }
+        return null;
+    }
 
-	public static String getScoreList() {
+    public static String getScoreList() {
         String result = "";
         for (Player p : players) {
             result += p + "\r\n";
