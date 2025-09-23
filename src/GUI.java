@@ -94,18 +94,18 @@ public class GUI extends Application {
 			primaryStage.show();
 
 
-			client = new TCPClient("localhost", 9000, this, myName);
+			client = new TCPClient("192.168.39.97", 9000, this, myName);
 
 			//sender moves til serveren
 			scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
 				switch (event.getCode()) {
 				case UP:
 					client.sendMessage(me.name + " up");
-//
+
 					break;
 				case DOWN:
 					client.sendMessage(me.name + " down");
-//
+
 					break;
 				case LEFT:
 					client.sendMessage(me.name + " left");
