@@ -18,7 +18,7 @@ public class RecieveThread extends Thread {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
             String message;
             while ((message = in.readLine()) != null) {
-                System.out.println("From server: " + message);
+                System.out.println("Fra server: " + message);
 
                 if (message.startsWith("UPDATE")) {
                     String[] parts = message.split(" ");

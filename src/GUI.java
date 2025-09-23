@@ -24,6 +24,10 @@ public class GUI extends Application {
 	public static Image image_wall;
 	public static Image hero_right,hero_left,hero_up,hero_down;
 
+	public static Image fireDown, fireUp, fireLeft, fireRight;
+	public static Image fireVertical, fireHorizontal;
+	public static Image fireWallNorth, fireWallSouth, fireWallEast, fireWallWest;
+
 	public static Player me;
     public static List<Player> players = new ArrayList<>();
 
@@ -65,6 +69,20 @@ public class GUI extends Application {
 			hero_up     = new Image(getClass().getResourceAsStream("Image/heroUp.png"),size,size,false,false);
 			hero_down   = new Image(getClass().getResourceAsStream("Image/heroDown.png"),size,size,false,false);
 
+
+			fireDown = new Image(getClass().getResourceAsStream("Image/fireDown.png"), size, size, false, false);
+			fireUp = new Image(getClass().getResourceAsStream("Image/fireUp.png"), size, size, false, false);
+			fireLeft = new Image(getClass().getResourceAsStream("Image/fireLeft.png"), size, size, false, false);
+			fireRight = new Image(getClass().getResourceAsStream("Image/fireRight.png"), size, size, false, false);
+
+			fireVertical = new Image(getClass().getResourceAsStream("Image/fireVertical.png"), size, size, false, false);
+			fireHorizontal = new Image(getClass().getResourceAsStream("Image/fireHorizontal.png"), size, size, false, false);
+
+			fireWallNorth = new Image(getClass().getResourceAsStream("Image/fireWallNorth.png"), size, size, false, false);
+			fireWallSouth = new Image(getClass().getResourceAsStream("Image/fireWallSouth.png"), size, size, false, false);
+			fireWallEast = new Image(getClass().getResourceAsStream("Image/fireWallEast.png"), size, size, false, false);
+			fireWallWest = new Image(getClass().getResourceAsStream("Image/fireWallWest.png"), size, size, false, false);
+
 			fields = new Label[20][20];
 			for (int j=0; j<20; j++) {
 				for (int i=0; i<20; i++) {
@@ -83,7 +101,6 @@ public class GUI extends Application {
 			}
 			scoreList.setEditable(false);
 
-
 			grid.add(mazeLabel,  0, 0);
 			grid.add(scoreLabel, 1, 0);
 			grid.add(boardGrid,  0, 1);
@@ -93,8 +110,7 @@ public class GUI extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.show();
 
-
-			client = new TCPClient("192.168.39.97", 9000, this, myName);
+			client = new TCPClient("localhost", 33000, this, myName);
 
 			//sender moves til serveren
 			scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
