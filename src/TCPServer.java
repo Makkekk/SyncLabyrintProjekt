@@ -45,7 +45,7 @@ public class TCPServer {
     public static void main(String[] args) throws Exception {
         ServerSocket welcomeSocket = new ServerSocket(9000);
 
-        players.add(new Player("Peter", 9, 4, "up"));
+       // players.add(new Player("Peter", 9, 4, "up"));
 
         while (true) {
             Socket connectionSocket = welcomeSocket.accept();
@@ -54,7 +54,6 @@ public class TCPServer {
 
         }
     }
-
 
     private static void haandterClient(Socket socket) {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
@@ -81,7 +80,6 @@ public class TCPServer {
 
 
             broadcast("UPDATE " + playerName + " " + startX + " " + startY + " up 0");
-
 
             String message;
             while ((message = in.readLine()) != null) {
@@ -174,6 +172,3 @@ public class TCPServer {
         }
     }
 }
-
-
-

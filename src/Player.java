@@ -26,12 +26,7 @@ public class Player {
 	public void setYpos(int ypos) {
 		this.ypos = ypos;
 	}
-	public String getDirection() {
-		return direction;
-	}
-	public void setDirection(String direction) {
-		this.direction = direction;
-	}
+
 	public void addPoints(int p) {
 		point+=p;
 	}

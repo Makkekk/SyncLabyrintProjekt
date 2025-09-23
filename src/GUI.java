@@ -66,10 +66,10 @@ public class GUI extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-            String myName = "Peter";
-            me = new Player(myName,0,0,"up");
+            String myName = "karsten";
+            me = new Player(myName,1,1,"up");
             players.add(me);
-            client = new TCPClient("192.168.0.210",9000,this,myName);
+            client = new TCPClient("10.10.137.205",9000,this,myName);
 
 			GridPane grid = new GridPane();
 			grid.setHgap(10);

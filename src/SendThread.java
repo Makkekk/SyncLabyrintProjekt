@@ -4,13 +4,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public class SendThread extends Thread{
     BufferedReader in;
     DataOutputStream out;
     String message;
-    HashSet<Socket> clients = new HashSet<>();
+    List<Socket> clients = new ArrayList<>();
 
     public SendThread(Socket socket) {
         clients.add(socket);
