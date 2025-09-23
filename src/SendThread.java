@@ -8,31 +8,32 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public class SendThread extends Thread{
-    BufferedReader in;
-    DataOutputStream out;
-    String message;
-    List<Socket> clients = new ArrayList<>();
+public class SendThread extends Thread {
+    private Socket socket;
 
     public SendThread(Socket socket) {
-        clients.add(socket);
+        this.socket = socket;
         System.out.println("Klient med ip " + socket.getInetAddress() + " tilføjet");
     }
 
-    public void run(){
-        try{
-            while(true){
-                for (Socket client : clients) {
-                    in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                    out = new DataOutputStream(client.getOutputStream());
+    public void run() {
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+            String message;
 
-                    message = in.readLine();
-                    System.out.println("Server modtog: " + message);
-                    out.writeBytes(message + '\n');
-                }
+            //første besked = playername
+            String playerName = in.readLine();
+            if (playerName == null) return;
+
+            TCPServer.registerPlayer(playerName);
+
+            while ((message = in.readLine()) != null) {
+                System.out.println("Server modtog: " + message);
+                // Process the move
+                TCPServer.handleMove(message);
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (IOException e) {
+            System.out.println("Client disconnected: " + socket.getInetAddress());
         }
+
     }
 }

@@ -13,7 +13,6 @@ public class Player {
 		this.direction = direction;
 		this.point = 0;
 	}
-
 	public int getXpos() {
 		return xpos;
 	}
@@ -26,15 +25,12 @@ public class Player {
 	public void setYpos(int ypos) {
 		this.ypos = ypos;
 	}
-
 	public void addPoints(int p) {
 		point+=p;
 	}
-
     public int getPoint() {
         return point;
     }
-
     public String toString() {
 		return name+":   "+point;
 	}

@@ -11,18 +11,16 @@ public class TCPClient {
     private DataOutputStream out;
     private BufferedReader in;
     private GUI gui;
-    private String playerName;
+    private String myName;
+    private RecieveThread receiveThread;
 
-    public TCPClient(String host, int port, GUI gui,String playerName) throws IOException {
-        this.gui = gui;
-        this.playerName = playerName;
+
+    public TCPClient(String host, int port, GUI gui,String myName) throws IOException {
+        this.myName = myName;
         socket = new Socket(host, port);
         out = new DataOutputStream(socket.getOutputStream());
-        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        out.writeBytes(myName + "\n");
 
-        sendMessage(playerName);
-
-        // Start dedicated receive thread
         new RecieveThread(socket, gui).start();
     }
 
