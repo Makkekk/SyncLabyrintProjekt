@@ -9,10 +9,7 @@ import java.net.*;
 public class TCPClient {
     private Socket socket;
     private DataOutputStream out;
-    private BufferedReader in;
-    private GUI gui;
     private String myName;
-    private RecieveThread receiveThread;
 
 
     public TCPClient(String host, int port, GUI gui,String myName) throws IOException {

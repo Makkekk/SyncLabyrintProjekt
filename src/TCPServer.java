@@ -30,7 +30,7 @@ public class TCPServer {
     };
 
     public static void main(String[] args) throws Exception {
-        ServerSocket welcomeSocket = new ServerSocket(9000);
+        ServerSocket welcomeSocket = new ServerSocket(33000);
         System.out.println("Server running on port 9000...");
 
         while (true) {
@@ -51,7 +51,7 @@ public class TCPServer {
                     startX = x;
                     startY = y;
                     found = true;
-                    break; // break inner loop
+                    break;
                 }
             }
         }
